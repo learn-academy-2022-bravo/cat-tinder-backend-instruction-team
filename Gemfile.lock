@@ -201,6 +201,7 @@ PLATFORMS
   arm64-darwin-21
   x86_64-darwin-20
 
+
 DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug

@@ -63,7 +63,27 @@ RSpec.describe "Cats", type: :request do
       expect(updated_cat.age).to eq(3)
     end
   end
-  describe 'Cat create request validations' do
+
+  describe "DELETE /destroy" do
+    it 'can delete an existing cat' do
+      cat_params = {
+        cat: {
+          name: 'Toast',
+          age: 2,
+          enjoys: 'allll the attention',
+          image: 'http://www.catpics.com'
+        }
+      }
+      post '/cats', params: cat_params
+      cat = Cat.first
+      delete "/cats/#{cat.id}"
+      cat = Cat.all
+      expect(response).to have_http_status(200)
+      expect(cat).to be_empty
+    end
+  end
+
+  describe "Cat create request validations" do
     it "doesn't create a cat without a name" do
       cat_params = {
         cat: {
@@ -73,13 +93,12 @@ RSpec.describe "Cats", type: :request do
         }
       }
       post '/cats', params: cat_params
-      # expect(response.status).to eq 422
-      expect(response).to have_http_status(422)
-
       json = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
       expect(json['name']).to include "can't be blank"
     end
-    it "doesn't create a cat without a age" do
+
+    it "doesn't create a cat without an age" do
       cat_params = {
         cat: {
           name: 'Toast',
@@ -88,13 +107,12 @@ RSpec.describe "Cats", type: :request do
         }
       }
       post '/cats', params: cat_params
-      # expect(response.status).to eq 422
-      expect(response).to have_http_status(422)
-
       json = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
       expect(json['age']).to include "can't be blank"
     end
-    it "doesn't create a cat without a enjoys" do
+
+    it "doesn't create a cat without an enjoys" do
       cat_params = {
         cat: {
           name: 'Toast',
@@ -103,12 +121,11 @@ RSpec.describe "Cats", type: :request do
         }
       }
       post '/cats', params: cat_params
-      # expect(response.status).to eq 422
-      expect(response).to have_http_status(422)
-
       json = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
       expect(json['enjoys']).to include "can't be blank"
     end
+
     it "doesn't create a cat without a image" do
       cat_params = {
         cat: {
@@ -118,11 +135,10 @@ RSpec.describe "Cats", type: :request do
         }
       }
       post '/cats', params: cat_params
-      # expect(response.status).to eq 422
-      expect(response).to have_http_status(422)
-
       json = JSON.parse(response.body)
+      expect(response).to have_http_status(422)
       expect(json['image']).to include "can't be blank"
     end
   end
+
 end

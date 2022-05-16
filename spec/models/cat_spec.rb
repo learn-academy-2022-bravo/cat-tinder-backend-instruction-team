@@ -46,8 +46,8 @@ RSpec.describe Cat, type: :model do
         enjoys: 'surfing',
         image:'https://cat-pic.jpg'
       )
-      expect(cat.errors[:enjoys]).to_not be_empty
+      expect(cat.errors[:enjoys].first).to eq("is too short (minimum is 10 characters)")
     end
-    
+
   end
 end
